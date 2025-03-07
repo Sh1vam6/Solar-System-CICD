@@ -18,7 +18,7 @@ jobs:
         strategy:
           matrix:
             os: [ubuntu-latest,macos-latest]
-            nodejs-version: [18, 19, 20]
+            nodejs-version: [18, 20]
             exclude:
               - os: macos-latest
                 nodejs-version: 18
@@ -37,13 +37,15 @@ jobs:
           run: npm install
 
         - name: Run unit tests
+          id: unit-tests
           run: npm test
 
         - name: Archive test result
+          if: failure()
           uses: actions/upload-artifact@v4
           with:
             name: mocha-test-results
-            path: mocha-test-results.xml
+            path: test-results.xml
             retention-days: 5
 
     code-coverage:
