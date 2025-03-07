@@ -76,9 +76,9 @@ jobs:
           mongo-db:
             image: siddharth67/mongo-db:non-prod
             options:
-                -- name mongo-db
+                -- name mongo
       env:
-         MONGO_URI: "mongodb://mongo-db:27017/superData" # mongo-db is the name of the service container
+         MONGO_URI: "mongodb://mongo:27017/superData" 
          MONGO_USERNAME: non-prod-user
          MONGO_PASSWORD: non-prod-password
 
