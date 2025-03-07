@@ -42,8 +42,9 @@ jobs:
         - name: Archive test result
           uses: actions/upload-artifact@v4
           with:
-            name: test-results
-            path: test-results-1.xml 
+            name: mocha-test-results
+            path: mocha-test-results.xml
+            retention-days: 5
 
     code-coverage:
       name: Code coverage
