@@ -195,6 +195,15 @@ jobs:
            kubectl cluster-info
            kubectl get nodes 
 
+    # installing nginx ingress controller for ingress(it should be installed in our cloud based cluster)
+      - name: Install NGINX Ingress Controller
+        run: |
+            kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+            kubectl wait --namespace ingress-nginx \
+               --for=condition=ready pod \
+               --selector=app.kubernetes.io/component=controller \
+               --timeout=120s
+
       - name: Save nginx ingress controller ip as GITHUB Env Variable
         run: |
           echo "INGRESS_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_ENV
