@@ -31,10 +31,7 @@ jobs:
         strategy:
           matrix:
             os: [ubuntu-latest] # [ubuntu-latest, macos-latest] , as macos-latest taking more time 
-            nodejs-version: [18, 20]
-            exclude:
-              - os: macos-latest
-                nodejs-version: 18
+            nodejs-version: [18]
 
         runs-on: ${{ matrix.os }}
         steps:
@@ -189,6 +186,6 @@ jobs:
 
       - name: Fetch Kubernetes cluster details
         run: |
-          kubectl version --short
+          kubectl version 
           echo ------------------
           kubectl get nodes
