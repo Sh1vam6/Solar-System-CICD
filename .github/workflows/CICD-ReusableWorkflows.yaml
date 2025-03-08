@@ -262,7 +262,7 @@ jobs:
     slack-notification: 
       if: always()
       runs-on: ubuntu-latest
-    #   needs: [dev-integration-testing, prod-integration-testing]
+      needs: [dev-integration-testing, prod-integration-testing]
       continue-on-error: true
       steps:
       - name: Slack Notification
