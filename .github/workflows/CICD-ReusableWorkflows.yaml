@@ -110,6 +110,33 @@ jobs:
           path: coverage
           retention-days: 5
 
+    report-S3:
+        name: upload report to s3
+        needs: [unit-testing, code-coverage]
+        runs-on: ubuntu-latest
+        continue-on-error: true
+        steps:
+        - name: Download Mocha test artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: mocha-test-results-${{ matrix.os }}-node${{ matrix.nodejs-version }}-${{ github.run_id }}
+        
+        - name: Download Code Coverager artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: code-coverage
+
+        - name: Merge test results
+          run: |
+            ls -ltr
+            mkdir reports-${{ github.sha }}
+            mv test-results.xml reports-${{ github.sha }}/
+            mv coverage reports-${{ github.sha }}/
+            ls -ltr reports-${{ github.sha }}
+
+        - name: Upload report to S3
+          run: echo "Uploading report to S3"
+
     docker:
       name: Containerize
       needs: [unit-testing, code-coverage]
@@ -173,6 +200,10 @@ jobs:
       secrets:
         k8s-config: ${{ secrets.KUBECONFIG}}
         mongodb-password: ${{ secrets.MONGO_PASSWORD}}
+      with:
+        mongo-uri: ${{ vars.MONGO_URI}}
+        environment: development
+        k8s-manifest-dir: kubernetes/development/
       
     dev-integration-testing:
       if: contains(github.ref, 'feature/')
@@ -182,7 +213,7 @@ jobs:
       steps:
       - name: Test url output using curl and jq
         env:
-            URL: ${{ needs.dev-deploy.outputs.APP_INGRESS_HOST}}
+            URL: ${{ needs.dev-deploy.outputs.application-url}}
         run: |
             echo $URL
             echo "----------------"
@@ -199,6 +230,10 @@ jobs:
                 secrets:
                   k8s-config: ${{ secrets.KUBECONFIG}}
                   mongodb-password: ${{ secrets.MONGO_PASSWORD}}
+                with:
+                  mongo-uri: ${{ vars.MONGO_URI}}
+                  environment: production
+                  k8s-manifest-dir: kubernetes/production/
           
     prod-integration-testing:
                 if: github.ref == 'refs/head/main'
@@ -208,7 +243,7 @@ jobs:
                 steps:
                 - name: Test url output using curl and jq
                   env:
-                      URL: ${{ needs.prod-deploy.outputs.APP_INGRESS_HOST}}
+                      URL: ${{ needs.prod-deploy.outputs.application-url}}
                   run: |
                       echo $URL
                       echo "----------------"
