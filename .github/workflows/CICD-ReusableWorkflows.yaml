@@ -133,11 +133,12 @@ jobs:
             mv test-results.xml reports-${{ github.sha }}/
             mv cobertura-coverage.xml reports-${{ github.sha }}/
             ls -ltr reports-${{ github.sha }}
+            
 
         - name: Upload report to S3
           uses: jakejarvis/s3-sync-action@master
           with:
-            args: --acl public-read --follow-symlinks --delete
+            args: --follow-symlinks --delete
           env:
             AWS_S3_BUCKET: github-actions-project-report
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
