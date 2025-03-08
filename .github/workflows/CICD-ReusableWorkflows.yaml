@@ -170,6 +170,9 @@ jobs:
       name: Deploy to dev
       needs: docker
       uses: ./.github/workflows/resuable-workflow.yaml
+      secrets:
+        k8s-config: ${{ secrets.KUBECONFIG}}
+        mongodb-password: ${{ secrets.MONGO_PASSWORD}}
       
     dev-integration-testing:
       if: contains(github.ref, 'feature/')
@@ -193,6 +196,9 @@ jobs:
                 name: Deploy to prod
                 needs: docker
                 uses: ./.github/workflows/resuable-workflow.yaml
+                secrets:
+                  k8s-config: ${{ secrets.KUBECONFIG}}
+                  mongodb-password: ${{ secrets.MONGO_PASSWORD}}
           
     prod-integration-testing:
                 if: github.ref == 'refs/head/main'
