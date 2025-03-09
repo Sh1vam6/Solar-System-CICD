@@ -43,7 +43,7 @@ jobs:
           with:
             node-version: ${{ matrix.nodejs-version}}
 
-        - name: Install npm package and cache npm package 
+        - name: Install npm package and cache npm package using custom action
           uses: ./.github/custom-actions/npm-actions
           with:
             path-of-folder: node_modules
