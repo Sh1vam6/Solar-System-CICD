@@ -33,7 +33,7 @@ jobs:
             os: [ubuntu-latest] # [ubuntu-latest, macos-latest] , as macos-latest taking more time 
             nodejs-version: [18]
 
-        runs-on: ${{ matrix.os }}
+        runs-on: [self-hosted, Linux, X64, prod, main]
         steps:
         - name: Checkout repository
           uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
          MONGO_USERNAME: non-prod-user
          MONGO_PASSWORD: non-prod-password
 
-      runs-on: ubuntu-latest
+      runs-on: [self-hosted, Linux, X64, prod, main]
       steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -115,7 +115,7 @@ jobs:
       needs: [unit-testing, code-coverage]
       permissions:
         packages: write
-      runs-on: ubuntu-latest
+      runs-on: [self-hosted, Linux, X64, prod, main]
       steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -174,7 +174,7 @@ jobs:
       needs: docker
       outputs:
         APP_INGRESS_HOST: ${{ steps.set-ingress-host-address.outputs.APP_INGRESS_HOST }}
-      runs-on: ubuntu-latest
+      runs-on: [self-hosted, Linux, X64, prod, main]
       steps:
       - name: checkout repository
         uses: actions/checkout@v4
@@ -244,7 +244,7 @@ jobs:
       if: contains(github.ref, 'feature/')
       name: Dev Integration testing
       needs: dev-deploy
-      runs-on: ubuntu-latest
+      runs-on: [self-hosted, Linux, X64, prod, main]
       steps:
       - name: Test url output using curl and jq
         env:
@@ -267,7 +267,7 @@ jobs:
                 needs: docker
                 outputs:
                   APP_INGRESS_HOST: ${{ steps.set-ingress-host-address.outputs.APP_INGRESS_HOST }}
-                runs-on: ubuntu-latest
+                runs-on: [self-hosted, Linux, X64, prod, main]
                 steps:
                 - name: checkout repository
                   uses: actions/checkout@v4
@@ -337,7 +337,7 @@ jobs:
                 if: github.ref == 'refs/head/main'
                 name: Prod Integration testing
                 needs: prod-deploy
-                runs-on: ubuntu-latest
+                runs-on: [self-hosted, Linux, X64, prod, main]
                 steps:
                 - name: Test url output using curl and jq
                   env:
