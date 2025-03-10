@@ -1,5 +1,5 @@
 # here we are using job and service container to run the test cases and code coverage 
-name: Solar system workflow CICD
+name: Solar system workflow CICD using composite action
 
 on:
   workflow_dispatch:
